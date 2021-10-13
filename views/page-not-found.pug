@@ -3,9 +3,10 @@ extends layout
 block content
 
   h1= err.status
-  p= message
-  p #{error.statusCode}
+  p= errorMessage
   br
   p
-  img(src='/images/missing.jpg') missing
     a.button(href='/') Home
+    br
+    br
+    img(src='/images/whoops.jpg')

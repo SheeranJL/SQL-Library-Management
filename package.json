@@ -1,5 +1,5 @@
 {
-  "name": "treehouse-project-10",
+  "name": "sql-library-manager",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -11,9 +11,15 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
-    "pug": "^2.0.0-beta11",
-    "sequelize": "^6.6.5",
+    "nodemon": "^2.0.13",
+    "pug": "^3.0.2",
+    "sequelize": "^6.7.0",
     "sequelize-cli": "^6.2.0",
     "sqlite3": "^5.0.2"
-  }
+  },
+  "description": "A library book management tool",
+  "main": "app.js",
+  "devDependencies": {},
+  "author": "Lewis Sheeran",
+  "license": "MIT"
 }

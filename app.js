@@ -3,25 +3,21 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+
 var app = express();
-
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
 var db = require('./models');
 
+
 (async () => {
-  await db.sequelize.sync({ force: true });
+  await db.sequelize.sync({force:true});
 
   try {
-    await db.sequelize.authenticate();
-    console.log('Connection was successful')
-
-  } catch (error) {
-    console.log('Error connecting to database', error)
+    db.sequelize.authenticate();
+    console.log('connection successful');
+  } catch(error) {
+    console.log('there was an errorr');
   }
-});
-
+})
 
 
 // view engine setup
@@ -34,22 +30,34 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/', require('./routes'));
+app.use('/books', require('./routes/books'));
+
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.use( (req, res, next) => {
+    // const err = new Error('Whoopsy! The page you requested cannot be found here!');
+    // err.status = 404;
+    next(createError(404))
 });
 
 // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
+app.use( (err, req, res, next) => {
+
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+
+  if (err.status === 404) {
+    console.log('A 404 Error occured');
+    const errorMessage = "Oh no! We couldn't find what you were looking for. It's probably lost within this picture somewhere. Go back and search again while we clean up.";
+    res.render('page-not-found', {errorMessage, err})
+  } else {
+    console.log('A 500 error occured.')
+    console.log(err)
+    res.status(err.status || 500)
+    const message = 'Oh no! Something on our end went wrong. If this error persists, please contact site admin.'
+    res.render('error', {message, err})
+  }
 });
 
 
